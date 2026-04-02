@@ -1,36 +1,37 @@
-const form = document.getElementById('registerForm');
+const registerForm = document.getElementById('registerForm');
+const loginForm = document.getElementById('loginForm');
 
-form.addEventListener('submit', async (e) => {
+
+registerForm.addEventListener('submit', async (e) => {
   e.preventDefault();
   const data = {
-    username: form.username.value,
-    password: form.password.value
+    username: registerForm.username.value.trim(),
+    password: registerForm.password.value
   };
 
-  const res = await fetch('http://localhost:5000/register', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data)
-  });
+  try {
+    const res = await fetch('http://localhost:5000/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    const text = await res.text();
+    alert(text);
 
-  app.post('/add-ad', (req, res) => {
-    const { title, category, description, price, role } = req.body;
-
-    // Galim tikrinti role, jeigu reikia (pvz., tik prisijungęs vartotojas)
-    if (!role || role !== 'user') {
-        return res.status(403).send('Tik prisijungęs vartotojas gali pridėti skelbimą');
+    if (res.ok && loginForm) {
+      registerForm.style.display = 'none';
+      loginForm.style.display = '';
+      loginForm.username.value = data.username;
     }
-
-    db.query(
-        'INSERT INTO ads (title, category, description, price) VALUES (?, ?, ?, ?)',
-        [title, category, description, price],
-        (err) => {
-            if (err) return res.status(400).send('Klaida pridedant skelbimą');
-            res.send('Skelbimas sėkmingai pridėtas!');
-        }
-    );
+  } catch (err) {
+    alert('Klaida registruojantis: ' + err.message);
+  }
 });
 
-  const text = await res.text();
-  alert(text);
-});
+// Login handler
+if (loginForm) {
+  loginForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    alert('Jūs prisijungėte');
+  });
+}
