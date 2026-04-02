@@ -4,8 +4,8 @@ let connection = mysql.createConnection({
     host: '127.0.0.1',
     port: 3306,
     user: 'root',
-    password: '',
-    database: 'mydb'
+    password: 'password',
+    database: 'mydb1'
 });
 
 connection.connect(function (err) {
